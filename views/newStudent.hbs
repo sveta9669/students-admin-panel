@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+  {{>header}}
+
+  <div class="input-div">
+
+ <div class="wrapper">
+      <h2>Registration</h2>
+      <form action="/addNewStudent" method="post">
+        <div class="input-box">
+          <input type="text" name="name" placeholder="Enter name" required>
+        </div>
+        <div class="input-box">
+          <input type="text" name="surname" placeholder="Enter surname" required>
+        </div>
+        <div class="input-box">
+          <input type="text" name="username" placeholder="Enter username" required>
+        </div>
+        <div class="input-box">
+          <input type="text" name="email" placeholder="Enter email" required>
+        </div>
+        <div class="input-box">
+          <input type="password" name="password" placeholder="Create password" required>
+        </div>
+
+        <div class="input-box button">
+          <input type="Submit" value="Register Now">
+        </div>
+      </form>
+    </div> 
+    {{!-- <div class="addNew">
+      <form action="/addNewStudent" method="post">
+        <input type="text" placeholder="name" name="name">
+        <input type="text" placeholder="surname" name="surname">
+        <input type="text" placeholder="username" name="username">
+        <input type="email" placeholder="email" name="email">
+        <input type="password" placeholder="password" name="password">
+        <button>Add New Student</button>
+      </form>
+    </div> --}}
+  </div>
+
+  {{>footer}}
+
+</body>
+
+</html>
