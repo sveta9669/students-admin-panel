@@ -1,5 +1,5 @@
 const express = require("express");
-const router = require('./router/router')
+const router = require('./routes/router')
 var flash = require('express-flash');
 var session = require('express-session');
 

@@ -26,11 +26,9 @@ header {
 }
 
 footer {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  text-align: center;
+  position: relative;
+  margin-top: 50px;
+  text-align: left;
   color: rgb(201, 130, 0);
 }
 
