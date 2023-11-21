@@ -9,10 +9,14 @@
 
 <body>
   {{>header}}
-
   <div class="input-div">
-
- <div class="wrapper">
+    <div class="wrapper">
+      {{#if message}}
+      <h3 class="success-mess">{{message}}</h3>
+      {{/if}}
+      {{#if error}}
+      <h3 class="error-mess">{{error}}</h3>
+      {{/if}}
       <h2>Registration</h2>
       <form action="/addNewStudent" method="post">
         <div class="input-box">
@@ -32,24 +36,13 @@
         </div>
 
         <div class="input-box button">
-          <input type="Submit" value="Register Now">
+          <input type="Submit" value="Register">
         </div>
       </form>
-    </div> 
-    {{!-- <div class="addNew">
-      <form action="/addNewStudent" method="post">
-        <input type="text" placeholder="name" name="name">
-        <input type="text" placeholder="surname" name="surname">
-        <input type="text" placeholder="username" name="username">
-        <input type="email" placeholder="email" name="email">
-        <input type="password" placeholder="password" name="password">
-        <button>Add New Student</button>
-      </form>
-    </div> --}}
+    </div>
   </div>
-
-  {{>footer}}
-
+ 
 </body>
+
 
 </html>

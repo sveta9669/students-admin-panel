@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "start": "node app.js"
+    "start": "node app.js",
+    "start-dev": "nodemon -r dotenv/config app"
   },
   "keywords": [],
   "author": "",
@@ -11,6 +12,7 @@
   "description": "",
   "dependencies": {
     "bcrypt": "^5.1.1",
+    "connect-flash": "^0.1.1",
     "express": "^4.18.2",
     "express-flash": "^0.0.2",
     "express-session": "^1.17.3",
@@ -18,7 +20,14 @@
     "joi": "^17.11.0",
     "mysql": "^2.18.1",
     "mysql2": "^3.6.3",
-    "nodemon": "^3.0.1",
     "sequelize": "^6.34.0"
+  },
+  "engine": {
+    "npm": "10.1.0",
+    "node": "20.9.0"
+  },
+  "devDependencies": {
+    "dotenv": "16.3.1",
+    "nodemon": "3.0.1"
   }
 }

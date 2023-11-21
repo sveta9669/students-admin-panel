@@ -1,13 +1,17 @@
 const express = require('express')
 const router = express.Router()
-const MainController = require('../controller/mainController')
+const MainService = require('../services/mainService')
 
 
-router.get('/', MainController.student)
-router.get('/new', MainController.newStudent)
-router.get('/search', MainController.search)
-router.post('/addNewStudent', MainController.addNewStudent)
-router.post('/update/:id', MainController.updateStudent)
-router.get('/edit', MainController.editStudent)
+router.get('/', MainService.student)
+router.get('/new', MainService.newStudent)
+router.get('/search', MainService.search)
+
+router.get('/edit', MainService.editStudent)
+router.get('/editById/:byid', MainService.editStudentById)
+
+router.post('/addNewStudent', MainService.addNewStudent)
+
+router.put('/update/:id', MainService.updateStudent)
  
 module.exports = router 
