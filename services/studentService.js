@@ -1,18 +1,9 @@
 const { Student } = require('../models/index')
 const { Op } = require("sequelize");
-const path = require('path');
 const bcrypt = require('bcrypt')
 const Joi = require('joi')
 
-const userSchema = Joi.object().keys({
-    name: Joi.string().alphanum().min(3).max(30).required(),
-    surname: Joi.string().alphanum().min(3).max(30).required(),
-    username: Joi.string().min(3).max(60).required(),
-    email: Joi.string().email().required(),
-    password: Joi.string().min(8).regex(/^[a-zA-Z0-9]{8,}$/).required()
-})
-
-class MainService {
+class StudentService {
     static async student(req, res) {
         try {
             let students = await Student.findAll()
@@ -23,7 +14,11 @@ class MainService {
     }
     static async newStudent(req, res) {
         try {
-            res.render('newStudent', {message : req.flash('message'), error:req.flash('error')})
+            res.render('newStudent',
+                {
+                    message: req.flash('message'),
+                    error: req.flash('error')
+                })
         } catch (err) {
             console.log(err)
         }
@@ -31,20 +26,28 @@ class MainService {
     static async addNewStudent(req, res) {
         try {
             const { name, surname, username, email, password } = req.body
-            const date = new Date()
-            const id = "" + Math.floor(Math.random() * 100000) + date.getMilliseconds() + date.getDate() + (date.getMonth() + 1) + date.getFullYear()
+
+            const userSchema = Joi.object().keys({
+                name: Joi.string().alphanum().min(3).max(30).required(),
+                surname: Joi.string().alphanum().min(3).max(30).required(),
+                username: Joi.string().min(3).max(60).required(),
+                email: Joi.string().email().required(),
+                password: Joi.string().min(8).regex(/^[a-zA-Z0-9]{8,}$/).required()
+            })
+
             const result = userSchema.validate({ name, surname, username, email, password })
-            const hash = bcrypt.hashSync(password, 10)
 
             if (!result.error) {
+                const date = new Date()
+                const id = "" + Math.floor(Math.random() * 100000) + date.getMilliseconds() + date.getDate() + (date.getMonth() + 1) + date.getFullYear()
+                const hash = bcrypt.hashSync(password, 10)
+
                 await Student.create({ generatedId: id, name, surname, username, email, password: hash })
                 req.flash('message', "Student added successfully")
             } else {
-                console.log(result.error.message)
-                req.flash('error', `${result.error.message}`)
-
+                console.log(result.error.details.message)
+                req.flash('error', `${result.error.details.message}`)
             }
-
             res.redirect('/new')
         } catch (err) {
             console.log(err)
@@ -54,12 +57,9 @@ class MainService {
         try {
             const { name, surname, username, email } = req.body
             const { id } = req.params
-            
-
-            console.log({ name, surname, username, email })
-            // await Student.update({ name, surname, username, email }, {
-            //     where: { id }
-            // })
+            await Student.update({ name, surname, username, email }, {
+                where: { id }
+            })
             res.redirect('/edit')
         } catch (err) {
             console.log(err)
@@ -67,14 +67,7 @@ class MainService {
     }
     static async editStudent(req, res) {
         try {
-            // console.log(id)
-            // if(id){
-                //     var students = await Student.findAll({ where: { id:byid } })
-                
-                // } else {
-                    
-                    var students = await Student.findAll()
-                    // }
+            const students = await Student.findAll()
             res.render('editStudent', { students })
         } catch (err) {
             console.log(err)
@@ -82,10 +75,9 @@ class MainService {
     }
     static async editStudentById(req, res) {
         try {
-            const { byid } = req.query
-            console.log(byid)
-            const stud = await Student.findOne({ where: { id: byid } })
-            res.render('editStudent', { stud })
+            const { id } = req.query
+            const students = await Student.findAll({ where: { id } })
+            res.render('editStudent', { students })
         } catch (err) {
             console.log(err)
         }
@@ -134,4 +126,4 @@ class MainService {
     }
 }
 
-module.exports = MainService
+module.exports = StudentService

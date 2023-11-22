@@ -1,15 +1,16 @@
 const express = require("express");
-const router = require('./routes/router')
+const router = require('./routes/studentRoute')
 const flash = require("connect-flash")
 const session = require("express-session")
 const app = express();
-const port = process.env.SERVER_PORT;
+const port = 3000;
  
 app.set("view engine", "hbs")
 app.use(express.json())
 app.use(express.urlencoded({extended:false}))
 app.use(express.static('public'))
 require('hbs').registerPartials(__dirname + '/views/component')
+
 app.use(session({
   secret:'vs',
   resave: false,
@@ -20,7 +21,13 @@ app.use(session({
 app.use(flash())
 
 app.use('/', router)
+
+app.use('*', (req,res)=>{
+  res.status(404).json({
+    message: 'Page Not Found'
+  })
+})
      
 app.listen(port, () => {
-  console.log(`Server started at port http://localhost:${process.env.SERVER_PORT}`);
+  console.log(`Server started at port http://localhost:${port}`);
 });

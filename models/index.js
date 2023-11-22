@@ -3,7 +3,7 @@ const sequelize = new Sequelize(process.env.MYSQL_DBNAME, process.env.MYSQL_USER
     host: process.env.MYSQL_HOST,
     port: process.env.MYSQL_PORT,
     dialect: process.env.MYSQL_DIALECT,
-    // logging: false
+    logging: false
 })
 
 const Student = require('./student')(sequelize, Sequelize)

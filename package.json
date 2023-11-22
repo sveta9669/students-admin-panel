@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "start": "node app.js",
+    "start": "node -r dotenv/config app",
     "start-dev": "nodemon -r dotenv/config app"
   },
   "keywords": [],
@@ -23,8 +23,8 @@
     "sequelize": "^6.34.0"
   },
   "engine": {
-    "npm": "10.1.0",
-    "node": "20.9.0"
+    "node": "20.9.0",
+    "npm": "10.1.0"
   },
   "devDependencies": {
     "dotenv": "16.3.1",
