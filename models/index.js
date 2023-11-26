@@ -9,4 +9,4 @@ const sequelize = new Sequelize(process.env.MYSQL_DBNAME, process.env.MYSQL_USER
 const Student = require('./student')(sequelize, Sequelize)
 sequelize.sync()
 
-module.exports = { Student, sequelize }
+module.exports = { Student }

@@ -6,7 +6,7 @@ const Joi = require('joi')
 class StudentService {
     static async student(req, res) {
         try {
-            let students = await Student.findAll()
+            const students = await Student.findAll()
             res.render('allStudent', { students })
         } catch (err) {
             console.log(err)
@@ -45,8 +45,8 @@ class StudentService {
                 await Student.create({ generatedId: id, name, surname, username, email, password: hash })
                 req.flash('message', "Student added successfully")
             } else {
-                console.log(result.error.details.message)
-                req.flash('error', `${result.error.details.message}`)
+                console.log(result.error.message)
+                req.flash('error', `${result.error.message}`)
             }
             res.redirect('/new')
         } catch (err) {

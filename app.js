@@ -15,7 +15,6 @@ app.use(session({
   secret:'vs',
   resave: false,
   saveUninitialized: true
-
 }))
 
 app.use(flash())
@@ -23,9 +22,10 @@ app.use(flash())
 app.use('/', router)
 
 app.use('*', (req,res)=>{
-  res.status(404).json({
-    message: 'Page Not Found'
-  })
+  res.redirect("/")
+  // res.status(404).json({
+  //   message: 'Page Not Found'
+  // })
 })
      
 app.listen(port, () => {
