@@ -3,6 +3,23 @@ const { Op } = require("sequelize");
 const bcrypt = require('bcrypt')
 const Joi = require('joi')
 
+const userSchema = Joi.object().keys({
+    name: Joi.string().alphanum().min(3).max(30).required(),
+    surname: Joi.string().alphanum().min(3).max(30).required(),
+    username: Joi.string().min(3).max(60).required(),
+    email: Joi.string().email().required(),
+    password: Joi.string().min(8).regex(/^[a-zA-Z0-9]{8,}$/).required(),
+})
+const updateSchema = Joi.object().keys({
+    name: Joi.string().alphanum().min(3).max(30).required(),
+    surname: Joi.string().alphanum().min(3).max(30).required(),
+    username: Joi.string().min(3).max(60).required(),
+    email: Joi.string().email().required()
+})
+const idSchema = Joi.object().keys({
+    id: Joi.number().integer().min(1).required()
+})
+
 class StudentService {
     static async student(req, res) {
         try {
@@ -10,6 +27,9 @@ class StudentService {
             res.render('allStudent', { students })
         } catch (err) {
             console.log(err)
+            return res.json({
+                message: "Something went wrong"
+            })
         }
     }
     static async newStudent(req, res) {
@@ -21,27 +41,21 @@ class StudentService {
                 })
         } catch (err) {
             console.log(err)
+            return res.json({
+                message: "Something went wrong"
+            })
+
         }
     }
     static async addNewStudent(req, res) {
         try {
             const { name, surname, username, email, password } = req.body
-
-            const userSchema = Joi.object().keys({
-                name: Joi.string().alphanum().min(3).max(30).required(),
-                surname: Joi.string().alphanum().min(3).max(30).required(),
-                username: Joi.string().min(3).max(60).required(),
-                email: Joi.string().email().required(),
-                password: Joi.string().min(8).regex(/^[a-zA-Z0-9]{8,}$/).required()
-            })
-
             const result = userSchema.validate({ name, surname, username, email, password })
 
             if (!result.error) {
                 const date = new Date()
                 const id = "" + Math.floor(Math.random() * 100000) + date.getMilliseconds() + date.getDate() + (date.getMonth() + 1) + date.getFullYear()
                 const hash = bcrypt.hashSync(password, 10)
-
                 await Student.create({ generatedId: id, name, surname, username, email, password: hash })
                 req.flash('message', "Student added successfully")
             } else {
@@ -51,18 +65,29 @@ class StudentService {
             res.redirect('/new')
         } catch (err) {
             console.log(err)
+            return res.json({
+                message: "Something went wrong"
+            })
         }
     }
     static async updateStudent(req, res) {
         try {
             const { name, surname, username, email } = req.body
             const { id } = req.params
-            await Student.update({ name, surname, username, email }, {
-                where: { id }
-            })
+            const result = updateSchema.validate({ name, surname, username, email })
+            if (!result.error) {
+                await Student.update({ name, surname, username, email }, {
+                    where: { id }
+                })
+            } else {
+                console.log(result.error)
+            }
             res.redirect('/edit')
         } catch (err) {
             console.log(err)
+            return res.json({
+                message: "Something went wrong"
+            })
         }
     }
     static async editStudent(req, res) {
@@ -71,15 +96,27 @@ class StudentService {
             res.render('editStudent', { students })
         } catch (err) {
             console.log(err)
+            return res.json({
+                message: "Something went wrong"
+            })
         }
     }
     static async editStudentById(req, res) {
         try {
             const { id } = req.query
-            const students = await Student.findAll({ where: { id } })
-            res.render('editStudent', { students })
+            const result = idSchema.validate({ id })
+            if (!result.error) {
+                const students = await Student.findAll({ where: { id } })
+                res.render('editStudent', { students })
+            } else {
+                console.log(result.error)
+                res.redirect("/")
+            }
         } catch (err) {
             console.log(err)
+            return res.json({
+                message: "Something went wrong"
+            })
         }
     }
     static async search(req, res) {
@@ -122,6 +159,9 @@ class StudentService {
             res.render('allStudent', { students })
         } catch (err) {
             console.log(err)
+            return res.json({
+                message: "Something went wrong"
+            })
         }
     }
 }
